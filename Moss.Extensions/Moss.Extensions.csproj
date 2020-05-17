@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <PackageId>Moss.Extensions</PackageId>
+    <Version>0.2.0</Version>
+    <Authors>Mustafa Oral</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/mustafaoral/Moss.Extensions</RepositoryUrl>
+    <Title>Moss Extensions</Title>
+    <PackageDescription>Extension methods for various base types.</PackageDescription>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+  </PropertyGroup>
+
+</Project>
