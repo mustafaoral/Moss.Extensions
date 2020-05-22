@@ -1,29 +1,42 @@
 name: $(Date:yyyy-MM-dd)$(Rev:.rr)
 pool:
   vmImage: windows-2019
-jobs:
-  - job: build
-    steps:
-      - task: DotNetCoreCLI@2
-        displayName: dotnet build
-        inputs:
-          command: build
-          arguments: --configuration Release --verbosity normal
-      - task: DotNetCoreCLI@2
-        displayName: dotnet test
-        inputs:
-          command: test
-          arguments: --no-build --configuration Release --verbosity normal
-      - task: DotNetCoreCLI@2
-        displayName: dotnet pack
-        inputs:
-          command: custom
-          custom: pack
-          packagesToPack: Moss.Extensions/Moss.Extensions.csproj
-          arguments: --no-build --configuration Release --verbosity normal --output $(Build.ArtifactStagingDirectory)
-      - task: NuGetCommand@2
-        displayName: nuget push
-        inputs:
-          command: push
-          nuGetFeedType: external
-          publishFeedCredentials: NuGet
+stages:
+  - stage: build
+    jobs:
+      - job: build
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: dotnet build
+            inputs:
+              command: build
+              arguments: --configuration Release --verbosity normal
+          - task: DotNetCoreCLI@2
+            displayName: dotnet test
+            inputs:
+              command: test
+              arguments: --no-build --configuration Release --verbosity normal
+          - task: DotNetCoreCLI@2
+            displayName: dotnet pack
+            inputs:
+              command: custom
+              custom: pack
+              packagesToPack: Moss.Extensions/Moss.Extensions.csproj
+              arguments: --no-build --configuration Release --verbosity normal --output $(Build.ArtifactStagingDirectory)
+          - publish: $(Build.ArtifactStagingDirectory)
+            artifact: package
+  - stage: publish
+    jobs:
+      - deployment:
+        environment: nuget
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: NuGetCommand@2
+                  displayName: nuget push
+                  inputs:
+                    command: push
+                    nuGetFeedType: external
+                    publishFeedCredentials: NuGet
+                    packagesToPush: $(Pipeline.Workspace)/package/*.nupkg
