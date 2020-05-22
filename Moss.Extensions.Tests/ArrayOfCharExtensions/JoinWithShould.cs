@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Moss.Extensions.Tests.ArrayOfCharExtensions
 {
-    public class JoinWithShould
+    public class DeserialiseAsStreamAsyncShould
     {
         [Fact]
         public void JoinCharsUsingSeparator()
