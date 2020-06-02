@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Moss.Extensions
 {
@@ -8,7 +9,7 @@ namespace Moss.Extensions
         /// Converts each byte in the array to its uppercase hex string representation, joining tokens using empty string separator.
         /// </summary>
         /// <param name="values">Values</param>
-        public static string ToHexString(this byte[] values)
+        public static string ToHexString(this IEnumerable<byte> values)
         {
             return ToHexString(values, string.Empty);
         }
@@ -18,7 +19,7 @@ namespace Moss.Extensions
         /// </summary>
         /// <param name="values">Values</param>
         /// <param name="separator">Separator to use for joining.</param>
-        public static string ToHexString(this byte[] values, string separator)
+        public static string ToHexString(this IEnumerable<byte> values, string separator)
         {
             return string.Join(separator, values.Select(x => x.ToString("X2")));
         }
