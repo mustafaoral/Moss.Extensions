@@ -21,8 +21,7 @@ stages:
             inputs:
               command: custom
               custom: pack
-              packagesToPack: Moss.Extensions/Moss.Extensions.csproj
-              arguments: --no-build --configuration Release --verbosity normal --output $(Build.ArtifactStagingDirectory)
+              arguments: Moss.Extensions/Moss.Extensions.csproj --no-build --configuration Release --verbosity normal --output $(Build.ArtifactStagingDirectory)
           - publish: $(Build.ArtifactStagingDirectory)
             artifact: package
   - stage: publish
