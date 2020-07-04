@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "Prefer classic using statements", Scope = "module")]
+[assembly: SuppressMessage("General", "RCS1118:Mark local variable as const.", Justification = "<Pending>", Scope = "member", Target = "~M:Moss.Extensions.Tests.HttpClientExtensions.GetAsStreamAndDeserializeAsyncShould.DeserializeContentAsStream(System.Text.Json.JsonSerializerOptions)~System.Threading.Tasks.Task")]
