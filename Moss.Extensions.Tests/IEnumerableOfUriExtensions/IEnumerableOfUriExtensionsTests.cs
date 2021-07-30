@@ -44,7 +44,7 @@ namespace Moss.Extensions.Tests.IEnumerableOfUriExtensions
                                {
                                    StatusCode = HttpStatusCode.OK,
                                    Content = new ByteArrayContent(Encoding.UTF8.GetBytes(td.Guid.ToString("N")))
-                               }, TimeSpan.FromMilliseconds(200 + Random.NextDouble() * 100));
+                               }, TimeSpan.FromSeconds(1) + TimeSpan.FromSeconds(Random.NextDouble()));
             }
         }
 
@@ -58,7 +58,7 @@ namespace Moss.Extensions.Tests.IEnumerableOfUriExtensions
                                .ReturnsAsync(new HttpResponseMessage()
                                {
                                    StatusCode = HttpStatusCode.NotFound
-                               }, TimeSpan.FromMilliseconds(200 + Random.NextDouble() * 100));
+                               }, TimeSpan.FromSeconds(1) + TimeSpan.FromSeconds(Random.NextDouble()));
             }
         }
 
