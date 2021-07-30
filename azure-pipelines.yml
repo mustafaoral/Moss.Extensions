@@ -1,10 +1,19 @@
 name: $(Date:yyyy-MM-dd)$(Rev:.rr)
+
 pool:
   vmImage: windows-2019
+
+trigger:
+  branches:
+    include:
+      - master
+
 stages:
   - stage: build
+    displayName: build & test & package
     jobs:
-      - job: build
+      - job: build_test_package
+        displayName: build & test & package
         steps:
           - task: DotNetCoreCLI@2
             displayName: dotnet build
