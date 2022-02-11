@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -90,7 +89,7 @@ namespace Moss.Extensions
         /// <param name="errorCallback">Error callback to invoke.</param>
         /// <param name="maxDownloadsInParallel">Number of maximum downloads to execute in parallel.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        public static async Task DownloadInParallel(this IEnumerable<Uri> values, HttpClient httpClient, Func<Uri, int, Stream, Task> successcallback, Func<Uri, int, HttpStatusCode, Task> errorCallback, int maxDownloadsInParallel, CancellationToken cancellationToken)
+        public static async Task DownloadInParallel(this IEnumerable<Uri> values, HttpClient httpClient, Func<Uri, int, Stream, Task> successcallback, Func<int, HttpResponseMessage, Task> errorCallback, int maxDownloadsInParallel, CancellationToken cancellationToken)
         {
             var throttler = new SemaphoreSlim(initialCount: maxDownloadsInParallel);
 
@@ -104,7 +103,7 @@ namespace Moss.Extensions
                     {
                         if (!response.IsSuccessStatusCode)
                         {
-                            await errorCallback(uri, i, response.StatusCode).ConfigureAwait(false);
+                            await errorCallback(i, response).ConfigureAwait(false);
 
                             return;
                         }

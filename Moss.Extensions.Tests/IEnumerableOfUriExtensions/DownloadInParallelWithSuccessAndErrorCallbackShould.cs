@@ -45,14 +45,14 @@ namespace Moss.Extensions.Tests.IEnumerableOfUriExtensions
             SetUpHttpHandlerMockForFailure();
 
             // act
-            await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), null, (uri, i, responseCode) =>
+            await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), null, (i, response) =>
             {
                 Events.Add("end");
 
-                var matchingTestData = TestDatas.Single(x => x.Uri == uri);
+                var matchingTestData = TestDatas.Single(x => x.Uri == response.RequestMessage.RequestUri);
 
                 matchingTestData.ResponseIndex = i;
-                matchingTestData.StatusCode = responseCode;
+                matchingTestData.StatusCode = response.StatusCode;
 
                 return Task.CompletedTask;
             }, maxDownloadsInParallel, CancellationToken.None);

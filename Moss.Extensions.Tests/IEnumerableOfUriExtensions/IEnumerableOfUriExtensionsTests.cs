@@ -57,7 +57,11 @@ namespace Moss.Extensions.Tests.IEnumerableOfUriExtensions
                                .Callback(() => Events.Add("start"))
                                .ReturnsAsync(new HttpResponseMessage()
                                {
-                                   StatusCode = HttpStatusCode.NotFound
+                                   StatusCode = HttpStatusCode.NotFound,
+                                   RequestMessage = new HttpRequestMessage
+                                   {
+                                       RequestUri = td.Uri
+                                   }
                                }, TimeSpan.FromSeconds(1) + TimeSpan.FromSeconds(Random.NextDouble()));
             }
         }
