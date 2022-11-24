@@ -79,7 +79,7 @@ namespace Moss.Extensions.Tests.IEnumerableOfUriExtensions
         {
             Events.Take(maxDownloadsInParallel).ShouldAllBe(x => x == "start", $"{Events.JoinWithComma()} does not have expected start sequence. {nameof(maxDownloadsInParallel)}: {maxDownloadsInParallel}");
 
-            var longestSequence = Events.GroupAdjacent(x => x).MaxBy(x => x.Count()).First();
+            var longestSequence = MoreEnumerable.MaxBy(Events.GroupAdjacent(x => x), x => x.Count()).First();
             longestSequence.Count().ShouldBeLessThanOrEqualTo(maxDownloadsInParallel);
         }
 
