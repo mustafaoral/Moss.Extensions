@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Moss.Extensions\Moss.Extensions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ArrayOfCharExtensions\" />
-  </ItemGroup>
-
 </Project>
