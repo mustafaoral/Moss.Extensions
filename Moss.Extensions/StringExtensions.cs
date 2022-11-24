@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Moss.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="string"/>
+    /// </summary>
     public static class StringExtensions
     {
         /// <summary>
@@ -49,7 +52,7 @@ namespace Moss.Extensions
 
             return Split();
 
-            /// Roslynator RCS1227
+            // Roslynator RCS1227
             IEnumerable<string> Split()
             {
                 if (string.IsNullOrWhiteSpace(value))

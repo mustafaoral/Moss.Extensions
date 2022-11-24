@@ -2,6 +2,9 @@
 
 namespace Moss.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="byte"/>
+    /// </summary>
     public static class ByteExtensions
     {
         /// <summary>

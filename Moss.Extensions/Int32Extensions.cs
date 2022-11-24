@@ -2,6 +2,9 @@
 
 namespace Moss.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="int"/>
+    /// </summary>
     public static class Int32Extensions
     {
         /// <summary>

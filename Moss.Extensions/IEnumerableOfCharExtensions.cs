@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Moss.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="IEnumerable{T}"/> of <see cref="char"/>
+    /// </summary>
     public static class IEnumerableOfCharExtensions
     {
         /// <summary>

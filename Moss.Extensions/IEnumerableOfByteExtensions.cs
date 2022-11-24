@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Moss.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="IEnumerable{T}"/> of <see cref="byte"/>
+    /// </summary>
     public static class IEnumerableOfByteExtensions
     {
         /// <summary>

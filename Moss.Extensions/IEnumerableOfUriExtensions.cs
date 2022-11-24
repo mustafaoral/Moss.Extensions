@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Moss.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="IEnumerable{T}"/> of <see cref="Uri"/>
+    /// </summary>
     public static partial class IEnumerableOfUriExtensions
     {
         /// <summary>
@@ -81,7 +84,7 @@ namespace Moss.Extensions
         /// <summary>
         /// Downloads resources expressed in the URIs in parallel using a supplied <see cref="HttpClient"/>.
         /// If the status code of the HTTP response is in the range of 200-299, invokes a success callback passing the URI, index, and response stream.
-        /// For other status codes, invokes an error callback passing in the URI, index, and status code.
+        /// For other status codes, invokes an error callback passing in the URI, index, and response.
         /// </summary>
         /// <param name="values">Values</param>
         /// <param name="httpClient">HTTP client.</param>

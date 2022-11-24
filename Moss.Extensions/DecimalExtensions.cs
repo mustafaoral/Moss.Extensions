@@ -3,6 +3,9 @@ using System.Globalization;
 
 namespace Moss.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="decimal"/>
+    /// </summary>
     public static class DecimalExtensions
     {
         private static readonly CultureInfo _enGbCultureInfo = CultureInfo.GetCultureInfo("en-gb");

@@ -2,6 +2,9 @@
 
 namespace Moss.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="Regex"/>
+    /// </summary>
     public static class RegexExtensions
     {
         /// <summary>
