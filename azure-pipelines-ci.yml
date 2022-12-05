@@ -6,7 +6,7 @@ pool:
 trigger:
   branches:
     exclude:
-      - master
+      - main
 
 jobs:
   - job: build_and_test
