@@ -1,32 +1,29 @@
-﻿using System.Text.RegularExpressions;
+﻿namespace Moss.Extensions;
 
-namespace Moss.Extensions
+/// <summary>
+/// Extension methods for <see cref="Regex"/>
+/// </summary>
+public static class RegexExtensions
 {
     /// <summary>
-    /// Extension methods for <see cref="Regex"/>
+    /// Tries to match the input using the Regex instance value.
     /// </summary>
-    public static class RegexExtensions
+    /// <param name="value">Value.</param>
+    /// <param name="input">The input to match.</param>
+    /// <param name="match">Contains the match if the method returns true, null otherwise.</param>
+    public static bool TryMatch(this Regex value, string input, out Match match)
     {
-        /// <summary>
-        /// Tries to match the input using the Regex instance value.
-        /// </summary>
-        /// <param name="value">Value.</param>
-        /// <param name="input">The input to match.</param>
-        /// <param name="match">Contains the match if the method returns true, null otherwise.</param>
-        public static bool TryMatch(this Regex value, string input, out Match match)
+        var _match = value.Match(input);
+
+        if (_match.Success)
         {
-            var _match = value.Match(input);
+            match = _match;
 
-            if (_match.Success)
-            {
-                match = _match;
-
-                return true;
-            }
-
-            match = null;
-
-            return false;
+            return true;
         }
+
+        match = null;
+
+        return false;
     }
 }

@@ -1,19 +1,14 @@
-﻿using System.Collections.Generic;
-using Shouldly;
-using Xunit;
+﻿namespace Moss.Extensions.Tests.IEnumerableOfStringExtensions;
 
-namespace Moss.Extensions.Tests.IEnumerableOfStringExtensions
+public class JoinWithCommaShould
 {
-    public class JoinWithCommaShould
+    [Fact]
+    public void JoinStringsTogetherUsingSeparator()
     {
-        [Fact]
-        public void JoinStringsTogetherUsingSeparator()
-        {
-            var tokens = new List<string> { "spam", "and", "eggs" };
+        var tokens = new List<string> { "spam", "and", "eggs" };
 
-            var result = tokens.JoinWithComma();
+        var result = tokens.JoinWithComma();
 
-            result.ShouldBe("spam,and,eggs");
-        }
+        result.ShouldBe("spam,and,eggs");
     }
 }

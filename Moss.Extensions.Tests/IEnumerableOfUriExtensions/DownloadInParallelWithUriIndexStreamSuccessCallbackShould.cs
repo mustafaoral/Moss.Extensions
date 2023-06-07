@@ -1,38 +1,31 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using MoreLinq;
-using Xunit;
+﻿using MoreLinq;
 
-namespace Moss.Extensions.Tests.IEnumerableOfUriExtensions
+namespace Moss.Extensions.Tests.IEnumerableOfUriExtensions;
+
+public class DownloadInParallelWithUriIndexStreamSuccessCallbackShould : IEnumerableOfUriExtensionsTests
 {
-    public class DownloadInParallelWithUriIndexStreamSuccessCallbackShould : IEnumerableOfUriExtensionsTests
+    [Fact]
+    public async Task DownloadContentUsingMaxDownloadsInParallel_AndCallSuccessCallback()
     {
-        [Fact]
-        public async Task DownloadContentUsingMaxDownloadsInParallel_AndCallSuccessCallback()
+        // arrange
+        var maxDownloadsInParallel = Random.Next(5, 20);
+
+        SetUpHttpHandlerMockForSuccess();
+
+        // act
+        await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), async (uri, i, stream) =>
         {
-            // arrange
-            var maxDownloadsInParallel = Random.Next(5, 20);
+            Events.Add("end");
 
-            SetUpHttpHandlerMockForSuccess();
+            var matchingTestData = TestDatas.Single(x => x.Uri == uri);
 
-            // act
-            await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), async (uri, i, stream) =>
-            {
-                Events.Add("end");
+            matchingTestData.ResponseIndex = i;
+            matchingTestData.ResponseContent = await GetGuidFromResponseStream(stream);
+        }, maxDownloadsInParallel, CancellationToken.None).ConfigureAwait(false);
 
-                var matchingTestData = TestDatas.Single(x => x.Uri == uri);
+        // assert
+        AssertEventSequence(maxDownloadsInParallel);
 
-                matchingTestData.ResponseIndex = i;
-                matchingTestData.ResponseContent = await GetGuidFromResponseStream(stream);
-            }, maxDownloadsInParallel, CancellationToken.None).ConfigureAwait(false);
-
-            // assert
-            AssertEventSequence(maxDownloadsInParallel);
-
-            AssertTestDatas();
-        }
+        AssertTestDatas();
     }
 }

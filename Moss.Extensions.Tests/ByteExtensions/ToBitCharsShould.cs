@@ -1,16 +1,12 @@
-﻿using Shouldly;
-using Xunit;
+﻿namespace Moss.Extensions.Tests.ByteExtensions;
 
-namespace Moss.Extensions.Tests.ByteExtensions
+public class ToBitCharsShould
 {
-    public class ToBitCharsShould
+    [Fact]
+    public void ConvertValueToBitChars()
     {
-        [Fact]
-        public void ConvertValueToBitChars()
-        {
-            byte value = 0x_42;
+        byte value = 0x_42;
 
-            value.ToBitChars().ShouldBe("01000010".ToCharArray());
-        }
+        value.ToBitChars().ShouldBe("01000010".ToCharArray());
     }
 }

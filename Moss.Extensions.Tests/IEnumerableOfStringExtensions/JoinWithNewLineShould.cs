@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Shouldly;
-using Xunit;
+﻿namespace Moss.Extensions.Tests.IEnumerableOfStringExtensions;
 
-namespace Moss.Extensions.Tests.IEnumerableOfStringExtensions
+public class JoinWithNewLineShould
 {
-    public class JoinWithNewLineShould
+    [Fact]
+    public void JoinStringsTogetherUsingNewline()
     {
-        [Fact]
-        public void JoinStringsTogetherUsingNewline()
-        {
-            var tokens = new List<string> { "spam", "and", "eggs" };
+        var tokens = new List<string> { "spam", "and", "eggs" };
 
-            var result = tokens.JoinWithNewLine();
+        var result = tokens.JoinWithNewLine();
 
-            result.ShouldBe($"spam{Environment.NewLine}and{Environment.NewLine}eggs");
-        }
+        result.ShouldBe($"spam{Environment.NewLine}and{Environment.NewLine}eggs");
     }
 }

@@ -1,19 +1,14 @@
-﻿using System.Collections.Generic;
-using Shouldly;
-using Xunit;
+﻿namespace Moss.Extensions.Tests.IEnumerableOfStringExtensions;
 
-namespace Moss.Extensions.Tests.IEnumerableOfStringExtensions
+public class JoinWithSpaceShould
 {
-    public class JoinWithSpaceShould
+    [Fact]
+    public void JoinStringsTogetherUsingSpace()
     {
-        [Fact]
-        public void JoinStringsTogetherUsingSpace()
-        {
-            var tokens = new List<string> { "spam", "and", "eggs" };
+        var tokens = new List<string> { "spam", "and", "eggs" };
 
-            var result = tokens.JoinWithSpace();
+        var result = tokens.JoinWithSpace();
 
-            result.ShouldBe("spam and eggs");
-        }
+        result.ShouldBe("spam and eggs");
     }
 }

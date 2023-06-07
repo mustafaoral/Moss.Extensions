@@ -12,6 +12,8 @@
     <PackageDescription>Extension methods for various base types.</PackageDescription>
     <NeutralLanguage>en-GB</NeutralLanguage>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>

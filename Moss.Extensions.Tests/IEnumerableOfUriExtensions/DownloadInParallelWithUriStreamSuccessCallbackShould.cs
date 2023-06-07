@@ -1,40 +1,33 @@
-﻿using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using MoreLinq;
-using Shouldly;
-using Xunit;
+﻿using MoreLinq;
 
-namespace Moss.Extensions.Tests.IEnumerableOfUriExtensions
+namespace Moss.Extensions.Tests.IEnumerableOfUriExtensions;
+
+public class DownloadInParallelWithUriStreamSuccessCallbackShould : IEnumerableOfUriExtensionsTests
 {
-    public class DownloadInParallelWithUriStreamSuccessCallbackShould : IEnumerableOfUriExtensionsTests
+    [Fact]
+    public async Task DownloadContentUsingMaxDownloadsInParallel_AndCallSuccessCallback()
     {
-        [Fact]
-        public async Task DownloadContentUsingMaxDownloadsInParallel_AndCallSuccessCallback()
+        // arrange
+        var maxDownloadsInParallel = Random.Next(5, 20);
+
+        SetUpHttpHandlerMockForSuccess();
+
+        // act
+        await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), async (uri, stream) =>
         {
-            // arrange
-            var maxDownloadsInParallel = Random.Next(5, 20);
+            Events.Add("end");
 
-            SetUpHttpHandlerMockForSuccess();
+            var matchingTestData = TestDatas.Single(x => x.Uri == uri);
 
-            // act
-            await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), async (uri, stream) =>
-            {
-                Events.Add("end");
+            matchingTestData.ResponseContent = await GetGuidFromResponseStream(stream);
+        }, maxDownloadsInParallel, CancellationToken.None).ConfigureAwait(false);
 
-                var matchingTestData = TestDatas.Single(x => x.Uri == uri);
+        // assert
+        AssertEventSequence(maxDownloadsInParallel);
 
-                matchingTestData.ResponseContent = await GetGuidFromResponseStream(stream);
-            }, maxDownloadsInParallel, CancellationToken.None).ConfigureAwait(false);
-
-            // assert
-            AssertEventSequence(maxDownloadsInParallel);
-
-            foreach (var td in TestDatas)
-            {
-                td.ResponseContent.ShouldBe(td.Guid);
-            }
+        foreach (var td in TestDatas)
+        {
+            td.ResponseContent.ShouldBe(td.Guid);
         }
     }
 }

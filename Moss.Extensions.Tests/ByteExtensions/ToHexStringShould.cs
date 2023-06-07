@@ -1,16 +1,12 @@
-﻿using Shouldly;
-using Xunit;
+﻿namespace Moss.Extensions.Tests.ByteExtensions;
 
-namespace Moss.Extensions.Tests.ByteExtensions
+public class ToHexStringShould
 {
-    public class ToHexStringShould
+    [Fact]
+    public void ConvertValueIntoHexString()
     {
-        [Fact]
-        public void ConvertValueIntoHexString()
-        {
-            byte value = 0x_42;
+        byte value = 0x_42;
 
-            value.ToHexString().ShouldBe("42");
-        }
+        value.ToHexString().ShouldBe("42");
     }
 }

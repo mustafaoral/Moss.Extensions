@@ -1,71 +1,62 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using Moq;
-using Moq.Protected;
-using Shouldly;
-using Xunit;
 
-namespace Moss.Extensions.Tests.HttpClientExtensions
+namespace Moss.Extensions.Tests.HttpClientExtensions;
+
+public class GetAsStreamAndDeserializeAsyncShould
 {
-    public class GetAsStreamAndDeserializeAsyncShould
+    [Fact]
+    public async Task DeserializeContentAsStreamUsingDefaultJsonSerializerSettings()
     {
-        [Fact]
-        public async Task DeserializeContentAsStreamUsingDefaultJsonSerializerSettings()
+        await DeserializeContentAsStream(null).ConfigureAwait(false);
+    }
+
+    [Fact]
+    public async Task DeserializeContentAsStreamUsingProvidedJsonSerializerSettings()
+    {
+        var jsonSerializerOptions = new JsonSerializerOptions
         {
-            await DeserializeContentAsStream(null).ConfigureAwait(false);
-        }
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
 
-        [Fact]
-        public async Task DeserializeContentAsStreamUsingProvidedJsonSerializerSettings()
+        await DeserializeContentAsStream(jsonSerializerOptions).ConfigureAwait(false);
+    }
+
+    private async Task DeserializeContentAsStream(JsonSerializerOptions jsonSerializerOptions)
+    {
+        var id = Guid.NewGuid();
+        var name = Guid.NewGuid().ToString("N");
+
+        var dto = new Dto
         {
-            var jsonSerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
+            Id = id,
+            Name = name
+        };
 
-            await DeserializeContentAsStream(jsonSerializerOptions).ConfigureAwait(false);
-        }
+        var requestUri = "http://test.com";
 
-        private async Task DeserializeContentAsStream(JsonSerializerOptions jsonSerializerOptions)
-        {
-            var id = Guid.NewGuid();
-            var name = Guid.NewGuid().ToString("N");
+        var handlerMock = new Mock<HttpMessageHandler>();
 
-            var dto = new Dto
-            {
-                Id = id,
-                Name = name
-            };
+        handlerMock.Protected()
+                   .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.Is<HttpRequestMessage>(x => x.RequestUri == new Uri(requestUri)), ItExpr.IsAny<CancellationToken>())
+                   .ReturnsAsync(new HttpResponseMessage()
+                   {
+                       StatusCode = HttpStatusCode.OK,
+                       Content = new ByteArrayContent(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(dto, jsonSerializerOptions))),
+                   });
 
-            var requestUri = "http://test.com";
+        var httpClient = new HttpClient(handlerMock.Object);
 
-            var handlerMock = new Mock<HttpMessageHandler>();
+        var result = await httpClient.GetAsStreamAndDeserializeAsync<Dto>(requestUri, jsonSerializerOptions).ConfigureAwait(false);
 
-            handlerMock.Protected()
-                       .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.Is<HttpRequestMessage>(x => x.RequestUri == new Uri(requestUri)), ItExpr.IsAny<CancellationToken>())
-                       .ReturnsAsync(new HttpResponseMessage()
-                       {
-                           StatusCode = HttpStatusCode.OK,
-                           Content = new ByteArrayContent(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(dto, jsonSerializerOptions))),
-                       });
+        result.Id.ShouldBe(id);
+        result.Name.ShouldBe(name);
+    }
 
-            var httpClient = new HttpClient(handlerMock.Object);
-
-            var result = await httpClient.GetAsStreamAndDeserializeAsync<Dto>(requestUri, jsonSerializerOptions).ConfigureAwait(false);
-
-            result.Id.ShouldBe(id);
-            result.Name.ShouldBe(name);
-        }
-
-        private class Dto
-        {
-            public Guid Id { get; set; }
-            public string Name { get; set; }
-        }
+    private class Dto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 }

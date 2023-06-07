@@ -1,16 +1,12 @@
-﻿using Shouldly;
-using Xunit;
+﻿namespace Moss.Extensions.Tests.StringExtensions;
 
-namespace Moss.Extensions.Tests.StringExtensions
+public class ConvertToBase64UrlShould
 {
-    public class ConvertToBase64UrlShould
+    [Fact]
+    public void ConvertValueToBase64()
     {
-        [Fact]
-        public void ConvertValueToBase64()
-        {
-            var result = "<<???>>".ConvertToBase64Url();
+        var result = "<<???>>".ConvertToBase64Url();
 
-            result.ShouldBe("PDw_Pz8-Pg");
-        }
+        result.ShouldBe("PDw_Pz8-Pg");
     }
 }

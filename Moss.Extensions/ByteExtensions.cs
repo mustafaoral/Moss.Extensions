@@ -1,37 +1,34 @@
-﻿using System;
+﻿namespace Moss.Extensions;
 
-namespace Moss.Extensions
+/// <summary>
+/// Extension methods for <see cref="byte"/>
+/// </summary>
+public static class ByteExtensions
 {
     /// <summary>
-    /// Extension methods for <see cref="byte"/>
+    /// Convert value to uppercase hex representation.
     /// </summary>
-    public static class ByteExtensions
+    /// <param name="value">Value.</param>
+    public static string ToHexString(this byte value)
     {
-        /// <summary>
-        /// Convert value to uppercase hex representation.
-        /// </summary>
-        /// <param name="value">Value.</param>
-        public static string ToHexString(this byte value)
-        {
-            return value.ToString("X2");
-        }
+        return value.ToString("X2");
+    }
 
-        /// <summary>
-        /// Converts value to a string representation of its bits using least significant bit ordering.
-        /// </summary>
-        /// <param name="value">Value.</param>
-        public static string ToBitString(this byte value)
-        {
-            return Convert.ToString(value, 2).PadLeft(8, '0');
-        }
+    /// <summary>
+    /// Converts value to a string representation of its bits using least significant bit ordering.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    public static string ToBitString(this byte value)
+    {
+        return Convert.ToString(value, 2).PadLeft(8, '0');
+    }
 
-        /// <summary>
-        /// Converts value to a char array representation of its bits using least significant bit ordering.
-        /// </summary>
-        /// <param name="value">Value.</param>
-        public static char[] ToBitChars(this byte value)
-        {
-            return ToBitString(value).ToCharArray();
-        }
+    /// <summary>
+    /// Converts value to a char array representation of its bits using least significant bit ordering.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    public static char[] ToBitChars(this byte value)
+    {
+        return ToBitString(value).ToCharArray();
     }
 }
