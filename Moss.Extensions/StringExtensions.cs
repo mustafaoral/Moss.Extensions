@@ -80,4 +80,27 @@ public static class StringExtensions
             }
         }
     }
+
+    /// <summary>
+    /// Converts the first letter to uppercase.
+    /// </summary>
+    /// <param name="value">Value.</param>
+    public static string FirstLetterUppercase(this string value)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value), "String instance is null.");
+        }
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return value;
+        }
+
+        return string.Create(value.Length, value, (chars, state) =>
+        {
+            state.AsSpan().CopyTo(chars);
+            chars[0] = char.ToUpper(chars[0]);
+        });
+    }
 }
