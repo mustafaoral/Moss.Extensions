@@ -1,11 +1,14 @@
 ﻿namespace Moss.Extensions;
 
+/// <summary>
+/// Extension methods for <see cref="IEnumerable{T}"/>
+/// </summary>
 public static partial class IEnumerableOfTExtensions
 {
     /// <summary>
     /// Projects into sequences of windows given the window size and step.
     /// </summary>
-    /// <typeparam name="T">F</typeparam>
+    /// <typeparam name="T">The type of the elements of <paramref name="values" />.</typeparam>
     /// <param name="values">Values.</param>
     /// <param name="size">Size of window.</param>
     /// <param name="step">Step of each window.</param>
