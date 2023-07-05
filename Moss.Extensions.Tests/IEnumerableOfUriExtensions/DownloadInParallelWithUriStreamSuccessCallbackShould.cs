@@ -15,7 +15,7 @@ public class DownloadInParallelWithUriStreamSuccessCallbackShould : IEnumerableO
         // act
         await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), async (uri, stream) =>
         {
-            Events.Add("end");
+            Events.Add(EventKey.End);
 
             var matchingTestData = TestDatas.Single(x => x.Uri == uri);
 

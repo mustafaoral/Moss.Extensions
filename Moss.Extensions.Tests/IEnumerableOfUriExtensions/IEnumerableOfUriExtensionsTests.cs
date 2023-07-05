@@ -16,25 +16,33 @@ public abstract class IEnumerableOfUriExtensionsTests
         public int ResponseIndex { get; set; }
     }
 
-    protected static readonly Random Random = new Random();
+    protected static readonly Random Random = new();
 
-    protected readonly Mock<HttpMessageHandler> HttpHandlerMock = new Mock<HttpMessageHandler>();
+    protected readonly Mock<HttpMessageHandler> HttpHandlerMock = new();
 
     protected readonly TestData[] TestDatas = CreateTestData();
-    protected readonly List<string> Events = new List<string>();
+    protected readonly List<string> Events = new();
 
+    protected static class EventKey
+    {
+        public static readonly string Start = "start";
+        public static readonly string End = "end";
+    }
+
+    // There needs to be a long enough delay before the response is returned so that new requests are queued.
+    // This enables assertions that requests up to the count of maxDownloadsInParallel, but no more, were in flight at any given time.
     protected void SetUpHttpHandlerMockForSuccess()
     {
         foreach (var td in TestDatas)
         {
             HttpHandlerMock.Protected()
                            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.Is<HttpRequestMessage>(x => x.RequestUri == td.Uri), ItExpr.IsAny<CancellationToken>())
-                           .Callback(() => Events.Add("start"))
+                           .Callback(() => Events.Add(EventKey.Start))
                            .ReturnsAsync(new HttpResponseMessage()
                            {
                                StatusCode = HttpStatusCode.OK,
                                Content = new ByteArrayContent(Encoding.UTF8.GetBytes(td.Guid.ToString("N")))
-                           }, TimeSpan.FromSeconds(1) + TimeSpan.FromSeconds(Random.NextDouble()));
+                           }, TimeSpan.FromMilliseconds(500) + TimeSpan.FromSeconds(Random.NextDouble()));
         }
     }
 
@@ -44,7 +52,7 @@ public abstract class IEnumerableOfUriExtensionsTests
         {
             HttpHandlerMock.Protected()
                            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.Is<HttpRequestMessage>(x => x.RequestUri == td.Uri), ItExpr.IsAny<CancellationToken>())
-                           .Callback(() => Events.Add("start"))
+                           .Callback(() => Events.Add(EventKey.Start))
                            .ReturnsAsync(new HttpResponseMessage()
                            {
                                StatusCode = HttpStatusCode.NotFound,
@@ -52,7 +60,7 @@ public abstract class IEnumerableOfUriExtensionsTests
                                {
                                    RequestUri = td.Uri
                                }
-                           }, TimeSpan.FromSeconds(1) + TimeSpan.FromSeconds(Random.NextDouble()));
+                           }, TimeSpan.FromMilliseconds(500) + TimeSpan.FromSeconds(Random.NextDouble()));
         }
     }
 
@@ -67,7 +75,7 @@ public abstract class IEnumerableOfUriExtensionsTests
 
     protected void AssertEventSequence(int maxDownloadsInParallel)
     {
-        Events.Take(maxDownloadsInParallel).ShouldAllBe(x => x == "start", $"{Events.JoinWithComma()} does not have expected start sequence. {nameof(maxDownloadsInParallel)}: {maxDownloadsInParallel}");
+        Events.Take(maxDownloadsInParallel).ShouldAllBe(x => x == EventKey.Start, $"{Events.JoinWithComma()} does not have expected start sequence. {nameof(maxDownloadsInParallel)}: {maxDownloadsInParallel}");
 
         var longestSequence = MoreEnumerable.MaxBy(Events.GroupAdjacent(x => x), x => x.Count()).First();
         longestSequence.Count().ShouldBeLessThanOrEqualTo(maxDownloadsInParallel);

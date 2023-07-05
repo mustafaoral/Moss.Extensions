@@ -16,13 +16,13 @@ public class DownloadInParallelWithSuccessAndErrorCallbackShould : IEnumerableOf
         // act
         await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), async (uri, i, stream) =>
         {
-            Events.Add("end");
+            Events.Add(EventKey.End);
 
             var matchingTestData = TestDatas.Single(x => x.Uri == uri);
 
             matchingTestData.ResponseIndex = i;
             matchingTestData.ResponseContent = await GetGuidFromResponseStream(stream);
-        }, null, maxDownloadsInParallel, CancellationToken.None);
+        }, errorCallback: null, maxDownloadsInParallel, CancellationToken.None);
 
         // assert
         AssertEventSequence(maxDownloadsInParallel);
@@ -38,9 +38,9 @@ public class DownloadInParallelWithSuccessAndErrorCallbackShould : IEnumerableOf
         SetUpHttpHandlerMockForFailure();
 
         // act
-        await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), null, (i, response) =>
+        await TestDatas.Select(x => x.Uri).DownloadInParallel(new HttpClient(HttpHandlerMock.Object), successcallback: null, (i, response) =>
         {
-            Events.Add("end");
+            Events.Add(EventKey.End);
 
             var matchingTestData = TestDatas.Single(x => x.Uri == response.RequestMessage.RequestUri);
 
