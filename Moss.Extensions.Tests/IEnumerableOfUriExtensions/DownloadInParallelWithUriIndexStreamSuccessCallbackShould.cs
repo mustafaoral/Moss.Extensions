@@ -21,7 +21,7 @@ public class DownloadInParallelWithUriIndexStreamSuccessCallbackShould : IEnumer
 
             matchingTestData.ResponseIndex = i;
             matchingTestData.ResponseContent = await GetGuidFromResponseStream(stream);
-        }, maxDownloadsInParallel, CancellationToken.None).ConfigureAwait(false);
+        }, maxDownloadsInParallel, CancellationToken.None);
 
         // assert
         AssertEventSequence(maxDownloadsInParallel);

@@ -20,7 +20,7 @@ public class DownloadInParallelWithUriStreamSuccessCallbackShould : IEnumerableO
             var matchingTestData = TestDatas.Single(x => x.Uri == uri);
 
             matchingTestData.ResponseContent = await GetGuidFromResponseStream(stream);
-        }, maxDownloadsInParallel, CancellationToken.None).ConfigureAwait(false);
+        }, maxDownloadsInParallel, CancellationToken.None);
 
         // assert
         AssertEventSequence(maxDownloadsInParallel);

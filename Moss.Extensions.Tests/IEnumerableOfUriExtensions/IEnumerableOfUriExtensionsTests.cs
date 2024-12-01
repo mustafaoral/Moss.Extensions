@@ -77,7 +77,7 @@ public abstract class IEnumerableOfUriExtensionsTests
     {
         Events.Take(maxDownloadsInParallel).ShouldAllBe(x => x == EventKey.Start, $"{Events.JoinWithComma()} does not have expected start sequence. {nameof(maxDownloadsInParallel)}: {maxDownloadsInParallel}");
 
-        var longestSequence = MoreEnumerable.MaxBy(Events.GroupAdjacent(x => x), x => x.Count()).First();
+        var longestSequence = MoreEnumerable.Maxima(Events.GroupAdjacent(x => x), x => x.Count()).First();
         longestSequence.Count().ShouldBeLessThanOrEqualTo(maxDownloadsInParallel);
     }
 

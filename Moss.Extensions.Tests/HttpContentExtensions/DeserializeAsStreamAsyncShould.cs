@@ -8,7 +8,7 @@ public class DeserializeAsStreamAsyncShould
     [Fact]
     public async Task DeserializeContentAsStreamUsingDefaultJsonSerializerSettings()
     {
-        await DeserializeContentAsStream(null).ConfigureAwait(false);
+        await DeserializeContentAsStream(null);
     }
 
     [Fact]
@@ -19,7 +19,7 @@ public class DeserializeAsStreamAsyncShould
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        await DeserializeContentAsStream(jsonSerializerOptions).ConfigureAwait(false);
+        await DeserializeContentAsStream(jsonSerializerOptions);
     }
 
     private async Task DeserializeContentAsStream(JsonSerializerOptions jsonSerializerOptions)
